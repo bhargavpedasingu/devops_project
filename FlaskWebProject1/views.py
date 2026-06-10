@@ -35,3 +35,6 @@ def about():
         year=datetime.now().year,
         message='Your application description page.'
     )
+@app.route('/version')
+def version():
+    return {"version":"1.0"}
