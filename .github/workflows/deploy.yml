@@ -45,12 +45,12 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/devopsapp:latest
-            ${{ github.sha }}
+        context: .
+        file: ./Dockerfile
+        push: true
+        tags: |
+        ${{ secrets.DOCKER_USERNAME }}/devopsapp:latest
+        ${{ secrets.DOCKER_USERNAME }}/devopsapp:${{ github.sha }}
 
   deploy:
     needs: build-push-docker
