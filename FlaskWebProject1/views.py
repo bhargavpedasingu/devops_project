@@ -7,6 +7,7 @@ from flask import jsonify
 from flask import render_template
 from FlaskWebProject1 import app
 
+
 @app.route('/')
 @app.route('/home')
 def home():
@@ -16,9 +17,13 @@ def home():
         title='Home Page',
         year=datetime.now().year,
     )
+
+
 @app.route('/version')
 def version():
-    return jsonify({"version": "3.0"})
+    return jsonify({"version": "2.0"})
+
+
 @app.route('/contact')
 def contact():
     """Renders the contact page."""
@@ -29,6 +34,7 @@ def contact():
         message='Your contact page.'
     )
 
+
 @app.route('/about')
 def about():
     """Renders the about page."""
@@ -38,6 +44,3 @@ def about():
         year=datetime.now().year,
         message='Your application description page.'
     )
-@app.route('/version')
-def version():
-    return {"version":"2.0"}
