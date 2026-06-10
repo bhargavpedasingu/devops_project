@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  flaskapp:
+    image: IMAGE_PLACEHOLDER
+    container_name: flaskapp
+    ports:
+      - "80:8000"
+    restart: always

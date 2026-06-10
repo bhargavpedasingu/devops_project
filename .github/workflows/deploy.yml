@@ -1,0 +1,41 @@
+deploy:
+needs: build-push-docker
+runs-on: ubuntu-latest
+
+steps:
+- name: Checkout code
+uses: actions/checkout@v4
+
+```
+- name: Create SSH key
+  run: |
+    echo "${{ secrets.AZURE_SSH_KEY }}" > devopskey.pem
+    chmod 600 devopskey.pem
+
+- name: Update docker-compose image using sed
+  run: |
+    sed -i "s|IMAGE_PLACEHOLDER|${{ secrets.DOCKER_USERNAME }}/devopsapp:${{ github.sha }}|g" docker-compose.yml
+
+- name: Copy compose file to VM
+  run: |
+    scp -o StrictHostKeyChecking=no \
+    -i devopskey.pem \
+    docker-compose.yml \
+    azureuser@20.215.35.77:/home/azureuser/
+
+- name: Deploy to Azure VM
+  run: |
+    ssh -o StrictHostKeyChecking=no \
+    -i devopskey.pem \
+    azureuser@20.215.35.77 << EOF
+
+    sudo docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+    cd /home/azureuser
+
+    sudo docker compose pull
+    sudo docker compose down
+    sudo docker compose up -d
+
+    EOF
+```
