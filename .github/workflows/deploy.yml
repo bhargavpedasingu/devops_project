@@ -88,10 +88,15 @@ jobs:
             -u "${{ secrets.DOCKER_USERNAME }}" \
             --password-stdin
 
-          cd /home/azureuser
+cd /home/azureuser
 
-          sudo docker compose pull
-          sudo docker compose down || true
-          sudo docker compose up -d
+      # 1. These two lines will install the missing docker compose plugin on your VM:
+      sudo apt-get update
+      sudo apt-get install -y docker-compose-plugin
 
-          EOF
+      # 2. Make sure these lines have only ONE 'docker' word and use a space:
+      sudo docker compose pull
+      sudo docker compose down || true
+      sudo docker compose up -d
+
+EOF
