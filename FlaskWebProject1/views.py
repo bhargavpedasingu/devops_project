@@ -21,7 +21,7 @@ def home():
 
 @app.route('/version')
 def version():
-    return jsonify({"version": "2.0"})
+    return jsonify({"version": "3000"})
 
 
 @app.route('/contact')
