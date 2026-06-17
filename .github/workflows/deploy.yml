@@ -88,15 +88,15 @@ jobs:
             -u "${{ secrets.DOCKER_USERNAME }}" \
             --password-stdin
 
-cd /home/azureuser
+          cd /home/azureuser
 
-      # 1. These two lines will install the missing docker compose plugin on your VM:
-      sudo apt-get update
-      sudo apt-get install -y docker-compose-plugin
+          # 1. Force update and install docker-compose plugin on your remote Azure VM
+          sudo apt-get update
+          sudo apt-get install -y docker-compose-plugin
 
-      # 2. Make sure these lines have only ONE 'docker' word and use a space:
-      sudo docker compose pull
-      sudo docker compose down || true
-      sudo docker compose up -d
-
-EOF
+          # 2. Deploy your application cleanly
+          sudo docker compose pull
+          sudo docker compose down || true
+          sudo docker compose up -d
+          
+          EOF
