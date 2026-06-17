@@ -90,11 +90,22 @@ jobs:
 
           cd /home/azureuser
 
-          # 1. Force update and install docker-compose plugin on your remote Azure VM
+          # 1. Add official Docker setup to download the missing compose plugin
+          sudo apt-get update
+          sudo apt-get install -y ca-certificates curl
+          sudo install -m 0755 -d /etc/apt/keyrings
+          sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+          sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+          # 2. Add the repository to Apt sources:
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+          $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+          
+          # 3. Update and install the plugin cleanly
           sudo apt-get update
           sudo apt-get install -y docker-compose-plugin
 
-          # 2. Deploy your application cleanly
+          # 4. Deploy your application containers
           sudo docker compose pull
           sudo docker compose down || true
           sudo docker compose up -d
