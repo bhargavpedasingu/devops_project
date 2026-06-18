@@ -3,10 +3,8 @@ name: Flask App CI/CD
 on:
   push:
     branches: [ main ]
-
   pull_request:
     branches: [ main ]
-
   workflow_dispatch:
 
 jobs:
@@ -55,4 +53,23 @@ jobs:
           push: true
           tags: |
             ${{ secrets.DOCKER_USERNAME }}/devopsapp:latest
-            ${{ secrets.DOCKER_USERNAME }}/devopsapp:${{ github.sha }}
+
+  deploy:
+    needs: build-push-docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to Azure VM via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: azureuser
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/azureuser
+            git pull origin main
+            docker compose down
+            docker compose up -d --force-recreate
