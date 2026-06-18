@@ -112,5 +112,5 @@ jobs:
 
             ${{ secrets.DOCKER_USERNAME }}/devopsapp:latest
 
-            ${{ secrets.DOCKER_USERNAME }}/devopsapp:${{ github. 
+            ${{ secrets.DOCKER_USERNAME }}/devopsapp:${{ github.sha }}
 
