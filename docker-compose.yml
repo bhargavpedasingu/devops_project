@@ -5,10 +5,10 @@ services:
     image: ${DOCKER_USERNAME}/devopsapp:${TAG_APP1}
     restart: always
     ports:
-      - "8001:5000" # Maps VM host port 8001 to container port 5000
+      - "8001:8000" # Maps VM host port 8001 to container port 8000
 
   flask-app-2:
     image: ${DOCKER_USERNAME}/devopsapp:${TAG_APP2}
     restart: always
     ports:
-      - "8002:5000" # Maps VM host port 8002 to container port 5000
+      - "8002:8000" # Maps VM host port 8002 to container port 8000
