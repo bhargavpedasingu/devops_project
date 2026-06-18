@@ -96,9 +96,8 @@ jobs:
 
           cd /home/azureuser
 
-          # Deploy both application instances cleanly without sudo roadblocks
-          docker compose pull
-          docker compose down || true
-          docker compose up -d --force-recreate
+          docker compose pull flask-app-1
+          docker compose up -d --no-deps --force-recreate flask-app-1
+          docker compose ps
           
           EOF
