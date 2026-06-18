@@ -69,10 +69,8 @@ jobs:
 
       - name: Prepare environment variables in docker-compose
         run: |
-          # This replaces variables inside docker-compose dynamically before copying it over
           export DOCKER_USERNAME="${{ secrets.DOCKER_USERNAME }}"
           export TAG_APP1="${{ github.sha }}"
-          # Keep app-2 pointing to latest stable tag for now as per Task 4 rule
           export TAG_APP2="latest" 
           
           sed -i "s|\${DOCKER_USERNAME}|$DOCKER_USERNAME|g" docker-compose.yml
@@ -92,19 +90,15 @@ jobs:
             -i devopskey.pem \
             azureuser@20.215.35.77 << 'EOF'
 
-          echo "${{ secrets.DOCKER_PASSWORD }}" | sudo docker login \
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login \
             -u "${{ secrets.DOCKER_USERNAME }}" \
             --password-stdin
 
           cd /home/azureuser
 
-          # Keep our docker-compose environment setup healthy
-          sudo apt-get update
-          sudo apt-get install -y docker-compose-plugin
-
-          # Deploy both application instances
-          sudo docker compose pull
-          sudo docker compose down || true
-          sudo docker compose up -d
+          # Deploy both application instances cleanly without sudo roadblocks
+          docker compose pull
+          docker compose down || true
+          docker compose up -d --force-recreate
           
           EOF
